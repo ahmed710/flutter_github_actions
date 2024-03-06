@@ -31,11 +31,11 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.TEST_SECRET }}
 
       - name: Release application
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TEST_SECRET  }}
         run: |
           VERSION=$(grep version: pubspec.yaml | awk '{print $2}' | sed 's/ //g' | sed 's/\"//g')
           NEXT_VERSION=$(echo "$VERSION + 0.1" | bc)
