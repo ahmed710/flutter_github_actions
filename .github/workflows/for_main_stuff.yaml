@@ -45,3 +45,15 @@ jobs:
           git commit -am "Bump version to $NEXT_VERSION"
           git tag -a "v$NEXT_VERSION" -m "Release v$NEXT_VERSION"
           git push origin main --follow-tags
+
+      - name: Release to App Store and Play Store
+        uses: fastlane/fastlane-action@v2
+        with:
+          lane: release
+          app_identifier: "your.app.identifier"
+          google_play_track: "internal"
+        env:
+          FASTLANE_USER: ${{ secrets.APPLE_ID }}
+          FASTLANE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          GOOGLE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }}
+          GOOGLE_PLAY_JSON_KEY: ${{ secrets.GOOGLE_PLAY_JSON_KEY }}
