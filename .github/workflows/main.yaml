@@ -43,7 +43,7 @@ jobs:
       - name: Deploy to Google Play Console
         uses: r0adkll/upload-google-play@v1.1.3
         with:
-          signingKeyBase64: ${{ secrets.GOOGLE_PLAY_SIGNING_KEY }}
+          serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.example.flutter_github_actions
           releaseFiles: ./build/app/outputs/flutter-apk/app-release.apk
           track: internal
