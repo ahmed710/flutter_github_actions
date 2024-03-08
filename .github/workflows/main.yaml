@@ -62,12 +62,17 @@ jobs:
       # Step to deploy to Google Play Console
       - name: Deploy to Google Play Console
         if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        id: deploy_to_play_console
         uses: r0adkll/upload-google-play@v1.1.3
         with:
           serviceAccountJson: ${{ env.SERVICE_ACCOUNT_JSON_BASE64 }}
           packageName: com.example.flutter_github_actions
           releaseFiles: ${{ github.workspace }}/build/app/outputs/flutter-apk/app-release.apk
           track: internal
+
+      # Additional steps for logging and debugging
+      - name: Display Deploy to Google Play Console Output
+        run: echo "${{ steps.deploy_to_play_console.outputs }}"
 
       # Step to remove the temporary credentials file
       - name: Remove credentials file
