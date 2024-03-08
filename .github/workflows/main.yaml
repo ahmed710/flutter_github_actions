@@ -31,9 +31,17 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
 
+      # Step to encode the SERVICE_ACCOUNT_JSON file and store it as a GitHub secret
+      - name: Encode and store SERVICE_ACCOUNT_JSON
+        run: |
+          cat your-service-account-file.json | base64
+        id: encode_secret
+        env:
+          SERVICE_ACCOUNT_JSON_BASE64: ${{ steps.encode_secret.outputs.stdout }}
+
       # Step to decode the SERVICE_ACCOUNT_JSON secret and save it to a file
       - name: Prepare Google Application Credentials
-        run: echo "${{ secrets.SERVICE_ACCOUNT_JSON }}" | base64 --decode > google-application-credentials.json
+        run: echo "${{ env.SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 --decode > google-application-credentials.json
 
       # Debugging step to print the content of the decoded Google service account JSON file
       - name: Print Google Service Account JSON
@@ -57,7 +65,7 @@ jobs:
         if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: r0adkll/upload-google-play@v1.1.3
         with:
-          serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          serviceAccountJson: ${{ env.SERVICE_ACCOUNT_JSON_BASE64 }}
           packageName: com.example.flutter_github_actions
           releaseFiles: ${{ github.workspace }}/build/app/outputs/flutter-apk/app-release.apk
           track: internal
