@@ -51,7 +51,7 @@ jobs:
         if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: r0adkll/upload-google-play@v1.1.3
         with:
-          serviceAccountJson: google-application-credentials.json
+          serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.example.flutter_github_actions
           releaseFiles: ${{ github.workspace }}/build/app/outputs/flutter-apk/app-release.apk
           track: internal
