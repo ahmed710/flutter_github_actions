@@ -31,21 +31,29 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
 
-      - name: Display SERVICE_ACCOUNT_JSON
-        run: echo "${{ secrets.SERVICE_ACCOUNT_JSON }}"
-
       - name: Prepare Google Application Credentials
-        run: echo "${{ secrets.SERVICE_ACCOUNT_KEY_SECRET_NAME }}" | base64 --decode > google-application-credentials.json
+        run: |
+          echo "${{ secrets.SERVICE_ACCOUNT_JSON }}" > google-application-credentials.json
 
       - name: Find APK
-        run: find . -type f -name '*.apk'
+        run: find ${{ github.workspace }} -type f -name '*.apk'
+
+      - name: Verify releaseFiles
+        run: |
+          if [ -f "${{ github.workspace }}/build/app/outputs/flutter-apk/app-release.apk" ]; then
+            echo "APK file exists."
+          else
+            echo "APK file does not exist."
+            exit 1
+          fi
 
       - name: Deploy to Google Play Console
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: r0adkll/upload-google-play@v1.1.3
         with:
-          serviceAccountJson: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          serviceAccountJson: google-application-credentials.json
           packageName: com.example.flutter_github_actions
-          releaseFiles: ./build/app/outputs/flutter-apk/app-release.apk
+          releaseFiles: ${{ github.workspace }}/build/app/outputs/flutter-apk/app-release.apk
           track: internal
 
       - name: Remove credentials file
