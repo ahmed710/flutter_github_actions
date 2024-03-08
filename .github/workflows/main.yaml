@@ -44,9 +44,9 @@ jobs:
           find . -type f -name '*.apk'
 
       - name: Deploy to Google Play Console
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.1.3
         with:
-          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          signingKeyBase64: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.example.flutter_github_actions
           releaseFiles: ./build/app/outputs/flutter-apk/app-release.apk
           track: internal
