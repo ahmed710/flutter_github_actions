@@ -35,24 +35,20 @@ jobs:
         run: echo "${{ secrets.SERVICE_ACCOUNT_JSON }}"
 
       - name: Prepare Google Application Credentials
-        shell: bash
-        run: |
-          echo "${{ secrets.SERVICE_ACCOUNT_KEY_SECRET_NAME }}" | base64 --decode > google-application-credentials.json
+        run: echo "${{ secrets.SERVICE_ACCOUNT_KEY_SECRET_NAME }}" | base64 --decode > google-application-credentials.json
 
       - name: Find APK
-        run: |
-          find . -type f -name '*.apk'
+        run: find . -type f -name '*.apk'
 
       - name: Deploy to Google Play Console
         uses: r0adkll/upload-google-play@v1.1.3
         with:
-          signingKeyBase64: ${{ google-application-credentials.json }}
+          signingKeyBase64: ${{ secrets.GOOGLE_PLAY_SIGNING_KEY }}
           packageName: com.example.flutter_github_actions
           releaseFiles: ./build/app/outputs/flutter-apk/app-release.apk
           track: internal
 
-
       - name: Remove credentials file
-        if: success() || failure()
+        if: always()
         run: |
           rm google-application-credentials.json
