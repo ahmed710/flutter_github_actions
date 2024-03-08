@@ -34,7 +34,7 @@ jobs:
       # Step to encode the SERVICE_ACCOUNT_JSON file and store it as a GitHub secret
       - name: Encode and store SERVICE_ACCOUNT_JSON
         run: |
-          cat your-service-account-file.json | base64
+          cat secrets.SERVICE_ACCOUNT_JSON | base64
         id: encode_secret
         env:
           SERVICE_ACCOUNT_JSON_BASE64: ${{ steps.encode_secret.outputs.stdout }}
