@@ -1,50 +1,62 @@
 name: Deploy Countries Pad
-'on':
-  workflow_dispatch: null
+
+on:
+  workflow_dispatch:
+
 jobs:
   build:
     name: Job 1 - Build Signed AAB
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Setup JDK 20
         uses: actions/setup-java@v3
         with:
-          distribution: temurin
-          java-version: 20
+          distribution: 'temurin'
+          java-version: '20'
+
       - name: Bump Version Code
         uses: chkfung/android-version-actions@v1.2.1
         with:
-          gradlePath: app/build.gradle.kts
+          gradlePath: 'app/build.gradle.kts'
           versionCode: '${{ github.run_number }}'
-          versionName: 1.0.0
+          versionName: '1.0.0'
+
       - name: Build prodRelease
         run: ./gradlew bundleRelease
-      - name: Sign AAb
+
+      - name: Sign AAB
         id: sign
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/bundle/release
+          releaseDirectory: 'app/build/outputs/bundle/release'
           signingKeyBase64: '${{ secrets.SERVICE_ACCOUNT_JSON }}'
+
       - name: Upload app bundle as artifact
         uses: actions/upload-artifact@v2
         with:
-          name: app-bundle
-          path: app/build/outputs/bundle/release/app-release.aab
-      - run: 'echo Build status report=${{ job.status }}'
+          name: 'app-bundle'
+          path: 'app/build/outputs/bundle/release/app-release.aab'
+
+      - name: Check Build status
+        run: echo "Build status report=${{ job.status }}"
+
   deploy:
-    name: Job_2 - Deploy aab to playstore
+    name: Job 2 - Deploy aab to playstore
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Download app bundle from artifact
         uses: actions/download-artifact@v2
         with:
-          name: app-bundle
+          name: 'app-bundle'
+
       - name: Publish to Play Store
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: '${{ secrets.SERVICE_ACCOUNT_JSON }}'
-          packageName: com.example.flutter_github_actions
+          packageName: 'com.example.flutter_github_actions'
           releaseFiles: '${{ github.workspace }}/app-release.aab'
-          track: internal
+          track: 'internal'
