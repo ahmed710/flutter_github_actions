@@ -12,12 +12,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 20
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      - name: Setup Gradle Cache
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
       - name: Bump Version Code
         uses: chkfung/android-version-actions@v1.2.1
         with:
