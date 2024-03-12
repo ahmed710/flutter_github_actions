@@ -88,6 +88,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: appbundle
+      - name: Debug artifact directory contents
+        run: ls -R ./build/app/outputs/appbundle/
       - name: Release app to internal track
         uses: r0adkll/upload-google-play@v1
         with:
@@ -95,3 +97,4 @@ jobs:
           packageName: com.example.flutter_github_actions
           releaseFiles: ./build/app/outputs/appbundle/app-release.aab
           track: internal
+
