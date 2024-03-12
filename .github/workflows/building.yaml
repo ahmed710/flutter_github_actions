@@ -80,26 +80,18 @@ jobs:
           path: build/app/outputs/bundle/release/app-release.aab
   release:
     name: Release app to internal track
-    needs: [build]
+    needs: [ build ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      # Decode base64-encoded service account JSON
-      - name: Decode service account JSON
-        run: echo "${{ secrets.BASE64_ENCODED_SERVICE_ACCOUNT_JSON }}" | base64 --decode > service-account.json
-
-      # Download the app bundle artifact
       - name: Get appbundle from artifacts
         uses: actions/download-artifact@v4
         with:
           name: appbundle
-
-      # Release app to internal track
       - name: Release app to internal track
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJsonPlainText: "$(cat service-account.json)"
+          serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
           packageName: com.fluttercicddemo
           releaseFiles: app-release.aab
           track: internal
