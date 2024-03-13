@@ -66,15 +66,6 @@ jobs:
       - run: flutter test
       - run: flutter build apk --release --split-per-abi
       - run: flutter build appbundle
-      - name: Extract package name
-        id: extract_package_name
-        run: |
-          grep 'package:' pubspec.yaml | sed 's/package: //' > package_name.txt
-      - name: Read package name
-        id: package_name
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: package_name.txt
       - name: Create a Release in GitHub
         uses: ncipollo/release-action@v1
         with:
@@ -87,7 +78,6 @@ jobs:
         with:
           name: appbundle
           path: build/app/outputs/bundle/release/app-release.aab
-
   release:
     name: Release app to internal track
     needs: [ build ]
@@ -102,6 +92,6 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
-          packageName: ${{ steps.package_name.outputs.content }}
+          packageName: com.example.flutter_github_actions
           releaseFiles: app-release.aab
           track: internal
