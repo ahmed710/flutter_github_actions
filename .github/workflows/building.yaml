@@ -68,7 +68,8 @@ jobs:
       - run: flutter build appbundle
       - name: Extract package name
         id: extract_package_name
-        run: echo $(grep 'package:' pubspec.yaml | sed 's/package: //') > package_name.txt
+        run: |
+          grep 'package:' pubspec.yaml | sed 's/package: //' > package_name.txt
       - name: Read package name
         id: package_name
         uses: juliangruber/read-file-action@v1
