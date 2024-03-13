@@ -89,10 +89,11 @@ jobs:
         with:
           name: appbundle
       - name: Release app to internal track
-        uses: tgrady/flutter-google-play@v1
+        uses: wzieba/FirebaseGooglePlayUpload@v2
         with:
           serviceAccountJson: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
-          packageName: com.example.flutter_github_actions
-          releaseFiles: app-release.aab
+          releaseFile: app-release.aab  # Adjust the file name as per your build
+          packageName: com.example.flutter_github_actions  # Adjust the package name accordingly
           track: internal
+
 
