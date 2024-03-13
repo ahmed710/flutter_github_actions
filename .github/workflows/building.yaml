@@ -89,9 +89,9 @@ jobs:
         with:
           name: appbundle
       - name: Release app to internal track
-        uses: r0adkll/upload-google-play@v1
+        uses: tgrady/flutter-google-play@v1
         with:
-          serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
+          serviceAccountJson: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
           packageName: com.example.flutter_github_actions
           releaseFiles: app-release.aab
           track: internal
