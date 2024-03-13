@@ -92,7 +92,7 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
-          packageName: flutter_github_actions
+          packageName: com.example.flutter_github_actions
           releaseFiles: app-release.aab
           track: internal
 
