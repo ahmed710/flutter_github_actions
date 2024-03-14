@@ -92,8 +92,8 @@ jobs:
         uses: wzieba/FirebaseGooglePlayUpload@v2
         with:
           serviceAccountJson: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
-          releaseFile: app-release.aab  # Adjust the file name as per your build
-          packageName: com.example.flutter_github_actions  # Adjust the package name accordingly
+          releaseFile: app-release.aab
+          packageName: com.example.flutter_github_actions
           track: internal
 
 
