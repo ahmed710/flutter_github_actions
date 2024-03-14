@@ -88,15 +88,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: appbundle
-      - name: List files in artifact
-        run: ls -R
       - name: Release app to internal track
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJson: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
+          serviceAccountJsonPlainText: ${{ secrets.PLAYSTORE_ACCOUNT_KEY }}
           packageName: com.example.flutter_github_actions
           releaseFiles: app-release.aab
           track: internal
-
-
-
